@@ -70,4 +70,20 @@ server.delete("/api/users/:id", (req, res) => {
     });
 });
 
+server.put("/api/users/:id", (req, res) => {
+  const id = req.params.id;
+  const updatedUser = req.body;
+  if (!updatedUser.name || !updatedUser.bio) {
+    res.status(400).json({ message: "Please provide name and bio for the user" });
+  } else {
+    Model.update(id, updatedUser).then((update) => {
+      if (!update) {
+        res.status(404).json({ message: "The user with the specified ID does not exist" });
+      } else {
+        res.status(200).json(update);
+      }
+    });
+  }
+});
+
 module.exports = server; // EXPORT YOUR SERVER instead of {}
